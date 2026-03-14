@@ -98,7 +98,7 @@
 
         .btn-gold {
             background: linear-gradient(135deg, var(--accent-gold), #b59020); /* Gradient Gold */
-            color: var(--white); /* White text for contrast */
+            color: var(--text-main); /* Dark text for better visibility on Gold */
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
             position: relative;
             overflow: hidden;
@@ -174,6 +174,37 @@
         .nav-links {
             display: flex;
             gap: 30px;
+            align-items: center;
+        }
+
+        .lang-selector {
+            position: relative;
+        }
+
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 160px;
+            z-index: 1000;
+            border: 1px solid var(--glass-border);
+        }
+
+        .lang-selector:hover .lang-dropdown {
+            display: block;
+        }
+
+        .lang-dropdown a {
+            display: block;
+            padding: 10px 15px;
+            text-transform: none !important;
+            text-align: left;
+            font-weight: 400 !important;
         }
 
         .nav-links a {
@@ -183,6 +214,10 @@
             position: relative;
             transition: var(--transition);
             color: var(--text-main);
+        }
+
+        .lang-dropdown a:hover {
+            background-color: var(--secondary-bg);
         }
 
         .nav-links a:hover {
@@ -215,10 +250,9 @@
         .hero {
             height: 100vh;
             /* Changed to a Global/Landmark themed background */
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -424,11 +458,21 @@
             color: var(--text-main);
         }
 
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
+        .marquee-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: scrollMarquee 50s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
         }
 
         .testimonial-card {
@@ -436,6 +480,22 @@
             padding: 30px;
             border-left: 5px solid var(--accent-gold);
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            flex: 0 0 350px; /* Fixed width for smooth scrolling */
+            max-width: 85vw; /* For mobile screens */
+            margin-right: 30px; /* Spacing between cards */
+            white-space: normal;
+        }
+        
+        .visa-tag {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
         }
 
         .stars {
@@ -453,7 +513,6 @@
         .contact {
             background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
-            background-attachment: fixed;
         }
 
         .contact-container {
@@ -497,12 +556,19 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--white);
             font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--accent-gold);
             background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Ensure dropdown options are readable on all devices */
+        select.form-control option {
+            background-color: var(--dark-bg);
+            color: var(--white);
         }
 
         /* --- FOOTER --- */
@@ -535,6 +601,19 @@
         }
         
         .footer-col p { color: #d1d5db !important; }
+        
+        .footer-col .logo {
+            color: var(--white);
+        }
+
+        .social-links a {
+            color: var(--white);
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            color: var(--accent-gold);
+        }
 
         .copyright {
             text-align: center;
@@ -582,9 +661,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
-            /* Performance Optimization for long lists */
-            content-visibility: auto;
-            contain-intrinsic-size: 50px; /* Fixed stability for scrollbar */
         }
         
         .countries-list-wrapper {
@@ -627,6 +703,58 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- MODAL OVERLAY --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--primary-bg);
+            padding: 40px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-gold);
+        }
+
+        /* --- GOOGLE TRANSLATE RESET --- */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 991px) { /* Improved mobile/tablet breakpoint */
             .hero h1 { font-size: 2.5rem; }
@@ -635,8 +763,22 @@
             .about-grid, .contact-container { grid-template-columns: 1fr; }
             .section-title { font-size: 2rem; }
             
+            .lang-dropdown {
+                position: static;
+                box-shadow: none;
+                border: none;
+            }
+            .lang-dropdown a {
+                text-align: center;
+            }
+            
             /* Fix mobile scroll freezing/hanging */
-            .hero, .contact { background-attachment: scroll; }
+            .hero { 
+                height: auto; 
+                min-height: 80vh; /* Reduces extreme zoom on mobile */
+                padding: 140px 20px 80px;
+                background-position: center top; /* Keeps skyline buildings visible */
+            }
             .about-image { margin-top: 40px; }
         }
     </style>
@@ -654,6 +796,15 @@
                     <li><a href="#services">Services</a></li>
                     <li><a href="#countries">Countries</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <li class="lang-selector">
+                        <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 5px;"><i class="fas fa-globe"></i> <span id="current-lang-label">EN</span> <i class="fas fa-caret-down"></i></a>
+                        <div class="lang-dropdown">
+                            <a href="#" onclick="changeLanguage('en'); return false;">English</a>
+                            <a href="#" onclick="changeLanguage('ar'); return false;">العربية (Arabic)</a>
+                            <a href="#" onclick="changeLanguage('zh-CN'); return false;">中文 (Chinese)</a>
+                            <a href="#" onclick="changeLanguage('ja'); return false;">日本語 (Japanese)</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
             <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
@@ -797,7 +948,7 @@
                         <p>Study, Work & Visit</p>
                     </div>
                 </div>
-                <div class="country-card" id="canada-card-trigger">
+                <div class="country-card">
                     <img src="https://images.unsplash.com/photo-1517935706615-2717063c2225?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Canada" loading="lazy">
                     <div class="country-overlay">
                         <h3>Canada</h3>
@@ -832,58 +983,19 @@
                         <p>Schengen Visas</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Canada Visa Details -->
-    <section id="canada-visa" class="section-padding" style="background-color: var(--secondary-bg);">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Canada Visa – Apply Online</h2>
-                <p style="color: var(--text-light);">Professional assistance for obtaining your Canada visa</p>
-            </div>
-            
-            <div class="about-grid" style="margin-top: 50px; align-items: start;">
-                <div class="about-text">
-                    <h3 style="margin-bottom: 25px; color: var(--accent-gold);">Visa Types</h3>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 5px;">Tourist Visa</h4>
-                        <p style="color: var(--text-light); font-size: 0.95rem;">For individuals traveling to Canada for tourism, leisure, or visiting family and friends.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 5px;">Business Visa</h4>
-                        <p style="color: var(--text-light); font-size: 0.95rem;">For individuals traveling to Canada for business-related activities such as meetings, conferences, or negotiations.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 5px;">Student Visa</h4>
-                        <p style="color: var(--text-light); font-size: 0.95rem;">For individuals who wish to study at a designated learning institution in Canada.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 5px;">Work Visa</h4>
-                        <p style="color: var(--text-light); font-size: 0.95rem;">For individuals who have a job offer from a Canadian employer and need a permit to work in Canada.</p>
+                <div class="country-card">
+                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Singapore" loading="lazy">
+                    <div class="country-overlay">
+                        <h3>Singapore</h3>
+                        <p>Work & Tourist Visas</p>
                     </div>
                 </div>
-
-                <div class="about-text" style="background: #ffffff; padding: 40px; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="margin-bottom: 20px; color: var(--accent-gold);">Required Documents</h3>
-                    <ul style="list-style: none; margin-bottom: 30px;">
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Valid passport</li>
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Passport size photographs</li>
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Visa application form</li>
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Bank statement</li>
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Travel itinerary & Hotel booking</li>
-                        <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check text-gold"></i> Invitation letter (if required)</li>
-                    </ul>
-
-                    <h4 style="margin-bottom: 10px;">Processing Time</h4>
-                    <p style="color: var(--text-light); margin-bottom: 30px;">Usually ranges between 5 to 30 working days depending on the visa type.</p>
-
-                    <a href="#contact" class="btn btn-gold" style="width: 100%; text-align: center;">Apply for Canada Visa</a>
+                <div class="country-card">
+                    <img src="https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Spain" loading="lazy">
+                    <div class="country-overlay">
+                        <h3>Spain</h3>
+                        <p>Golden Visa & Tourist</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -936,7 +1048,7 @@
                     <h4 style="margin-bottom: 10px;">Processing Time</h4>
                     <p style="color: var(--text-light); margin-bottom: 30px;">Varies by country and visa type, typically from 5 to 30 working days.</p>
 
-                    <a href="#contact" class="btn btn-gold" style="width: 100%; text-align: center;">Apply Now</a>
+                    <button type="button" onclick="document.getElementById('applyModal').style.display='flex';" class="btn btn-gold" style="width: 100%; font-family: inherit; font-size: 1rem; border: none; cursor: pointer;">Apply Now</button>
                 </div>
             </div>
         </div>
@@ -1102,21 +1214,97 @@
             <div class="text-center">
                 <h2 class="section-title">Client Success Stories</h2>
             </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"Global Hub Visa made my dream of studying in Canada a reality. Their team guided me through every step of the study permit process. Highly recommended!"</p>
-                    <div class="client-name">- Sarah Jenkins</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"Professional and efficient. I got my Dubai work visa processed much faster than I expected. The transparency they maintain is commendable."</p>
-                    <div class="client-name">- Ahmed Al-Fayed</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"The best immigration consultants for USA visas. They helped me with my B1/B2 visa application, and the interview prep was a game changer."</p>
-                    <div class="client-name">- Rahul Sharma</div>
+            
+            <!-- Auto-scrolling Marquee -->
+            <div class="marquee-wrapper" style="margin-top: 40px;">
+                <div class="marquee-track">
+                    <!-- Original Set -->
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Canada Study Visa</div>
+                        <p>"Global Hub Visa made my dream of studying in Canada a reality. Their team guided me through every step of the study permit process. Highly recommended!"</p>
+                        <div class="client-name">- Sarah Jenkins</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Dubai Work Visa</div>
+                        <p>"Professional and efficient. I got my Dubai work visa processed much faster than I expected. The transparency they maintain is commendable."</p>
+                        <div class="client-name">- Ahmed Al-Fayed</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> USA B1/B2 Visa</div>
+                        <p>"The best immigration consultants for USA visas. They helped me with my B1/B2 application, and the interview prep was an absolute game changer."</p>
+                        <div class="client-name">- Rahul Sharma</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> UK Skilled Worker</div>
+                        <p>"Thanks to Global Hub Visa, my transition to the UK was seamless. They handled my Tier 2 visa flawlessly. I couldn't be happier with their service!"</p>
+                        <div class="client-name">- Maria Gonzalez</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Australia PR</div>
+                        <p>"The PR process for Australia seemed daunting, but their expert guidance made it entirely stress-free. Highly recommended!"</p>
+                        <div class="client-name">- David Chen</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Schengen Tourist</div>
+                        <p>"Got my Schengen tourist visa approved in record time! The team helped me organize all my documents perfectly."</p>
+                        <div class="client-name">- Priya Patel</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Singapore Work</div>
+                        <p>"Exceptional service! They handled my Singapore employment pass with utmost professionalism and kept me updated daily."</p>
+                        <div class="client-name">- Michael Roberts</div>
+                    </div>
+
+                    <!-- Duplicated Set for Infinite Loop -->
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Canada Study Visa</div>
+                        <p>"Global Hub Visa made my dream of studying in Canada a reality. Their team guided me through every step of the study permit process. Highly recommended!"</p>
+                        <div class="client-name">- Sarah Jenkins</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Dubai Work Visa</div>
+                        <p>"Professional and efficient. I got my Dubai work visa processed much faster than I expected. The transparency they maintain is commendable."</p>
+                        <div class="client-name">- Ahmed Al-Fayed</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> USA B1/B2 Visa</div>
+                        <p>"The best immigration consultants for USA visas. They helped me with my B1/B2 application, and the interview prep was an absolute game changer."</p>
+                        <div class="client-name">- Rahul Sharma</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> UK Skilled Worker</div>
+                        <p>"Thanks to Global Hub Visa, my transition to the UK was seamless. They handled my Tier 2 visa flawlessly. I couldn't be happier with their service!"</p>
+                        <div class="client-name">- Maria Gonzalez</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Australia PR</div>
+                        <p>"The PR process for Australia seemed daunting, but their expert guidance made it entirely stress-free. Highly recommended!"</p>
+                        <div class="client-name">- David Chen</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Schengen Tourist</div>
+                        <p>"Got my Schengen tourist visa approved in record time! The team helped me organize all my documents perfectly."</p>
+                        <div class="client-name">- Priya Patel</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="visa-tag"><i class="fas fa-check-circle"></i> Singapore Work</div>
+                        <p>"Exceptional service! They handled my Singapore employment pass with utmost professionalism and kept me updated daily."</p>
+                        <div class="client-name">- Michael Roberts</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1127,12 +1315,12 @@
         <div class="container">
             <div class="text-center" style="margin-bottom: 40px;">
                 <h2 class="section-title">Start Your Journey</h2>
-                <p>Contact us today for a free consultation</p>
+                <p style="color: var(--white);">Contact us today for a free consultation</p>
             </div>
             <div class="contact-container">
                 <div class="contact-info">
                     <h3>Get In Touch</h3>
-                    <p style="margin-bottom: 30px;">Visit our office or send us a message. Our experts are ready to assist you.</p>
+                    <p style="margin-bottom: 30px; color: var(--white);">Visit our office or send us a message. Our experts are ready to assist you.</p>
                     
                     <div class="info-item">
                         <i class="fas fa-map-marker-alt"></i>
@@ -1165,7 +1353,7 @@
                             <input type="tel" class="form-control" placeholder="Phone Number" required>
                         </div>
                         <div class="form-group">
-                            <select class="form-control" style="background: rgba(255,255,255,0.1); color: #94a3b8;">
+                            <select class="form-control" style="background: rgba(255,255,255,0.1); color: #FFFFFF;">
                                 <option value="" disabled selected>Select Visa Type</option>
                                 <option>Student Visa</option>
                                 <option>Work Visa</option>
@@ -1211,11 +1399,13 @@
                 </div>
                 <div class="footer-col">
                     <h4>Follow Us</h4>
-                    <div style="display: flex; gap: 15px; font-size: 1.2rem;">
+                    <div class="social-links" style="display: flex; gap: 15px; font-size: 1.2rem;">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
@@ -1230,7 +1420,66 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- Apply Modal -->
+    <div id="applyModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('applyModal').style.display='none';">&times;</span>
+            <h3 style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.5rem;">Submit Your Application</h3>
+            <form id="modalForm">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <input type="text" class="form-control" placeholder="Full Name" style="background: var(--primary-bg); color: var(--text-main); border: 1px solid #e2e8f0;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <input type="email" class="form-control" placeholder="Email Address" style="background: var(--primary-bg); color: var(--text-main); border: 1px solid #e2e8f0;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <input type="tel" class="form-control" placeholder="Phone Number" style="background: var(--primary-bg); color: var(--text-main); border: 1px solid #e2e8f0;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <select class="form-control" style="background: var(--primary-bg); color: var(--text-main); border: 1px solid #e2e8f0;" required>
+                        <option value="" disabled selected>Select Visa Type</option>
+                        <option>Tourist Visa</option>
+                        <option>Business Visa</option>
+                        <option>Work Visa</option>
+                        <option>Student Visa</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-gold" style="width: 100%; border: none; font-family: inherit; font-size: 1rem; cursor: pointer;">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Google Translate Element (Hidden) -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ar,zh-CN,ja,en', autoDisplay: false}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+
     <script>
+        // Language Switcher Logic
+        function changeLanguage(langCode) {
+            document.cookie = "googtrans=/en/" + langCode + "; path=/";
+            if (window.location.hostname) {
+                document.cookie = "googtrans=/en/" + langCode + "; domain=." + window.location.hostname + "; path=/";
+            }
+            window.location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const langMatch = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+            if (langMatch && langMatch[1]) {
+                const lang = langMatch[1];
+                const langLabel = document.getElementById('current-lang-label');
+                if (lang === 'ar') { langLabel.textContent = 'AR'; document.documentElement.dir = 'rtl'; } // RTL for Arabic
+                else if (lang === 'zh-CN') { langLabel.textContent = 'ZH'; }
+                else if (lang === 'ja') { langLabel.textContent = 'JA'; }
+                else { langLabel.textContent = 'EN'; }
+            }
+        });
+
         // Mobile Menu Toggle
         const mobileToggle = document.querySelector('.mobile-toggle');
         const navLinks = document.querySelector('.nav-links');
@@ -1258,6 +1507,22 @@
             this.reset();
         });
 
+        // Modal Form Submission Mock
+        document.getElementById('modalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your application has been submitted successfully! We will contact you soon.');
+            this.reset();
+            document.getElementById('applyModal').style.display='none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            var modal = document.getElementById('applyModal');
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
         // Optimization: Event Delegation for Smooth Scroll
         // Instead of 200+ listeners, we use just ONE listener on the document.
         document.addEventListener('click', function(e) {
@@ -1281,11 +1546,6 @@
                     console.warn("Invalid selector:", targetId);
                 }
             }
-        });
-
-        // Canada Card Click Handler
-        document.getElementById('canada-card-trigger').addEventListener('click', function() {
-            document.getElementById('canada-visa').scrollIntoView({ behavior: 'smooth' });
         });
     </script>
 </body>
